@@ -23,7 +23,6 @@ public class ItemServlet extends HttpServlet {
             throws ServletException, IOException {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setContentType("application/json; charset=utf-8");
-
         OutputStream output = resp.getOutputStream();
         List<Item> items = HbmStore.instOf().findAll();
         String json = GSON.toJson(items);
@@ -40,12 +39,11 @@ public class ItemServlet extends HttpServlet {
         HbmStore store = HbmStore.instOf();
         String id = req.getParameter("id");
         if (id != null) {
-            Item item = store.findById(Integer.parseInt(id));
-            store.update(item);
+            store.update(Integer.parseInt(id));
         } else {
             String description = req.getParameter("Text");
             store.add(new Item().itemOf(0, description, new Date(), false));
         }
-        resp.sendRedirect(req.getContextPath() + "/index.jsp");
+        resp.sendRedirect(req.getContextPath() + "/index.html");
     }
 }
