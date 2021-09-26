@@ -9,6 +9,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.todo.model.Item;
+import ru.job4j.todo.model.User;
 
 import java.util.List;
 import java.util.function.Function;
@@ -49,8 +50,17 @@ public class HbmStore {
         return item;
     }
 
+    public User add(User user) {
+        this.tx(session -> session.save(user));
+        return user;
+    }
+
     public List<Item> findAll() {
         return this.tx(session -> session.createQuery("from Item").list());
+    }
+
+    public List<User> findAllUsers() {
+        return this.tx(session -> session.createQuery("from User").list());
     }
 
     public Item findById(int id) {
@@ -60,5 +70,14 @@ public class HbmStore {
     public boolean update(int id) {
         return this.tx(session -> session.createQuery("update Item set done = true where id = :id")
                 .setParameter("id", id).executeUpdate()) != null;
+    }
+
+    public User findUserByEmail(String email) {
+        return (User) this.tx(session -> session.createQuery(
+                        "from User where email = :email").setParameter("email", email)
+                .list()
+                .stream()
+                .findFirst()
+                .orElse(null));
     }
 }

@@ -3,6 +3,7 @@ package ru.job4j.todo.servlets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import ru.job4j.todo.model.Item;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.store.HbmStore;
 
 import javax.servlet.ServletException;
@@ -42,8 +43,9 @@ public class ItemServlet extends HttpServlet {
             store.update(Integer.parseInt(id));
         } else {
             String description = req.getParameter("Text");
-            store.add(new Item().itemOf(0, description, new Date(), false));
+            User user = (User) req.getSession().getAttribute("user");
+            store.add(Item.itemOf(0, description, new Date(), false, user));
         }
-        resp.sendRedirect(req.getContextPath() + "/index.html");
+        resp.sendRedirect(req.getContextPath() + "/index.jsp");
     }
 }
