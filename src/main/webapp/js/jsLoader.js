@@ -1,3 +1,12 @@
+function validate() {
+    let x = Boolean(true);
+    if ($('#Text').val() === "") {
+        alert($('#Text').attr('title'));
+        x = false;
+    }
+    return x;
+}
+
 $(document).ready(function () {
     $.ajax({
         type: 'GET',

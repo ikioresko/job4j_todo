@@ -47,11 +47,9 @@
                               placeholder="Описание" rows="3" cols="150"
                               title="Поле Описание не может быть пустым"></textarea>
                 </div>
-                <!--                <div class="col-auto">-->
                 <button type="submit" class="btn btn-primary mb-2"
-                        onclick="return validate()">Добавить
+                        onclick="return validate();">Добавить
                 </button>
-                <!--                </div>-->
             </div>
         </div>
     </form>

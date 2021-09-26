@@ -15,7 +15,7 @@ public class Item {
     private boolean done;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     public static Item itemOf(int id, String description, Date created, boolean done, User user) {
@@ -68,11 +68,11 @@ public class Item {
     @Override
     public String toString() {
         return "Item{"
-             +   "id=" + id
-              +  ", description='" + description + '\''
-               + ", created=" + created
-              +  ", done=" + done
-              +  ", user=" + user
-               + '}';
+                + "id=" + id
+                + ", description='" + description + '\''
+                + ", created=" + created
+                + ", done=" + done
+                + ", user=" + user
+                + '}';
     }
 }
