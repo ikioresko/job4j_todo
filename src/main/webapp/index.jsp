@@ -18,19 +18,23 @@
 <div class="nav-list">
     <ul class="nav">
         <li class="nav-item">
-            <a class="nav-link" href="<%=request.getContextPath()%>/index.jsp">Главная</a>
+            <a class="nav-link"
+               href="<%=request.getContextPath()%>/index.jsp">Главная</a>
         </li>
         <c:if test="${user == null}">
             <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/register.jsp">Регистрация</a>
+                <a class="nav-link"
+                   href="<%=request.getContextPath()%>/register.jsp">Регистрация</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/auth.jsp">Войти</a>
+                <a class="nav-link"
+                   href="<%=request.getContextPath()%>/auth.jsp">Войти</a>
             </li>
         </c:if>
         <c:if test="${user != null}">
             <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/logout.do">
+                <a class="nav-link"
+                   href="<%=request.getContextPath()%>/logout.do">
                     <c:out value="${user.name}"/> | Выйти</a>
                 </a>
             </li>
@@ -46,6 +50,15 @@
                     <textarea class="form-control" id="Text" name="Text"
                               placeholder="Описание" rows="3" cols="150"
                               title="Поле Описание не может быть пустым"></textarea>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" for="category"
+                           style="font-weight: 900">Список категорий</label>
+                    <div class="col-sm-5">
+                        <select class="form-control" name="category" id="category" multiple
+                                title="Выберите категорию">
+                        </select>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary mb-2"
                         onclick="return validate();">Добавить
@@ -65,6 +78,7 @@
                 <th scope="col">Описание</th>
                 <th scope="col">Дата</th>
                 <th scope="col">Статус</th>
+                <th scope="col">Категория</th>
                 <th scope="col">Автор</th>
             </tr>
             </thead>

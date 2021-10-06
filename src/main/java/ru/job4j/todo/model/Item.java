@@ -1,8 +1,7 @@
 package ru.job4j.todo.model;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "items")
@@ -17,6 +16,13 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Category> catList = new HashSet<>();
+
+    public void addCategory(Category category) {
+        catList.add(category);
+    }
 
     public static Item itemOf(int id, String description, Date created, boolean done, User user) {
         Item item = new Item();
@@ -44,6 +50,14 @@ public class Item {
         return done;
     }
 
+    public Set<Category> getCatList() {
+        return catList;
+    }
+
+    public void setCatList(Set<Category> catList) {
+        this.catList = catList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -53,16 +67,12 @@ public class Item {
             return false;
         }
         Item item = (Item) o;
-        return id == item.id
-                && done == item.done
-                && Objects.equals(description, item.description)
-                && Objects.equals(created, item.created)
-                && Objects.equals(user, item.user);
+        return id == item.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, created, done, user);
+        return Objects.hash(id);
     }
 
     @Override

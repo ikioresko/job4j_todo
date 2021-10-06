@@ -18,6 +18,7 @@ import java.util.List;
 
 public class ItemServlet extends HttpServlet {
     private final static Gson GSON = new GsonBuilder().create();
+    private final HbmStore store = HbmStore.instOf();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -25,7 +26,7 @@ public class ItemServlet extends HttpServlet {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setContentType("application/json; charset=utf-8");
         OutputStream output = resp.getOutputStream();
-        List<Item> items = HbmStore.instOf().findAll();
+        List<Item> items = store.findAll();
         String json = GSON.toJson(items);
         output.write(json.getBytes(StandardCharsets.UTF_8));
         output.flush();
@@ -37,14 +38,14 @@ public class ItemServlet extends HttpServlet {
             throws ServletException, IOException {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setContentType("application/json; charset=utf-8");
-        HbmStore store = HbmStore.instOf();
         String id = req.getParameter("id");
         if (id != null) {
             store.update(Integer.parseInt(id));
         } else {
+            String[] cIds = req.getParameterValues("category");
             String description = req.getParameter("Text");
             User user = (User) req.getSession().getAttribute("user");
-            store.add(Item.itemOf(0, description, new Date(), false, user));
+            store.add(Item.itemOf(0, description, new Date(), false, user), cIds);
         }
         resp.sendRedirect(req.getContextPath() + "/index.jsp");
     }

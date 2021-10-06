@@ -4,7 +4,21 @@ function validate() {
         alert($('#Text').attr('title'));
         x = false;
     }
+    if ($('#category').val().length === 0) {
+        alert($('#category').attr('title'));
+        x = false;
+    }
     return x;
+}
+
+function getCategories(array) {
+    let cats = "";
+    let arrayCategories = Array.from(array);
+    for (let cat of arrayCategories) {
+        cats += cat.name;
+        cats += " "
+    }
+    return cats;
 }
 
 $(document).ready(function () {
@@ -24,6 +38,7 @@ $(document).ready(function () {
                     trClass = "inv";
                     status = "Завершено";
                 }
+                let categories = getCategories(item.catList);
                 items += "<tr class=" + trClass + ">"
                     + "<td><input type=checkbox class=taskCheck name=taskCheck value="
                     + id + " onchange=cl(" + id + ")"
@@ -32,6 +47,7 @@ $(document).ready(function () {
                     + "<td>" + item.description + "</td>"
                     + "<td>" + item.created + "</td>"
                     + "<td>" + status + "</td>"
+                    + "<td>" + categories + "</td>"
                     + "<td>" + item.user.name + "</td>"
                     + "</tr>";
             }
@@ -39,7 +55,24 @@ $(document).ready(function () {
             $(".inv").toggle();
         }
     })
-})
+});
+
+$(document).ready(function () {
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/todo/categories.do',
+        dataType: 'json'
+    }).done(function (data) {
+        for (var city of data) {
+            $('#category').append($('<option>', {
+                value: city.id,
+                text: city.name
+            }));
+        }
+    }).fail(function (err) {
+        console.log(err);
+    });
+});
 
 $(document).ready(function () {
     $(".hider").on('change', function () {

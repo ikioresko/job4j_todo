@@ -8,6 +8,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 
@@ -45,8 +46,18 @@ public class HbmStore {
         return rsl;
     }
 
-    public Item add(Item item) {
-        this.tx(session -> session.save(item));
+    public Item add(Item item, String[] ids) {
+        try (Session session = sf.openSession()) {
+            session.beginTransaction();
+            for (String id : ids) {
+                Category category = session.find(Category.class, Integer.parseInt(id));
+                item.addCategory(category);
+            }
+            session.persist(item);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            LOG.error("Exception: ", e);
+        }
         return item;
     }
 
@@ -56,11 +67,16 @@ public class HbmStore {
     }
 
     public List<Item> findAll() {
-        return this.tx(session -> session.createQuery("from Item").list());
+        return this.tx(session -> session
+                .createQuery("select distinct i from Item i join fetch i.catList").list());
     }
 
     public List<User> findAllUsers() {
         return this.tx(session -> session.createQuery("from User").list());
+    }
+
+    public List<Category> findAllCategories() {
+        return this.tx(session -> session.createQuery("from Category").list());
     }
 
     public Item findById(int id) {
@@ -68,16 +84,22 @@ public class HbmStore {
     }
 
     public boolean update(int id) {
-        return this.tx(session -> session.createQuery("update Item set done = true where id = :id")
+        return this.tx(session -> session
+                .createQuery("update Item set done = true where id = :id")
                 .setParameter("id", id).executeUpdate()) != null;
     }
 
     public User findUserByEmail(String email) {
         return (User) this.tx(session -> session.createQuery(
-                        "from User where email = :email").setParameter("email", email)
+                        "from User where email = :email")
+                .setParameter("email", email)
                 .list()
                 .stream()
                 .findFirst()
                 .orElse(null));
+    }
+
+    public void close() throws Exception {
+        sf.close();
     }
 }

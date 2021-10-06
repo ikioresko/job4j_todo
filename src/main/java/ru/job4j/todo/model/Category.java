@@ -2,40 +2,35 @@ package ru.job4j.todo.model;
 
 import javax.persistence.*;
 import java.util.Objects;
-
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "categories")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private String email;
-    private String password;
 
-    public static User userOf(int id, String name, String email, String password) {
-        User user = new User();
-        user.id = id;
-        user.name = name;
-        user.email = email;
-        user.password = password;
-        return user;
+    public Category() {
+    }
+
+    public Category(String name) {
+        this.name = name;
     }
 
     public int getId() {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -46,8 +41,8 @@ public class User {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        User user = (User) o;
-        return id == user.id;
+        Category category = (Category) o;
+        return id == category.id;
     }
 
     @Override
@@ -57,11 +52,9 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{"
+        return "Category{"
                 + "id=" + id
                 + ", name='" + name + '\''
-                + ", email='" + email + '\''
-                + ", password='" + password + '\''
                 + '}';
     }
 }
