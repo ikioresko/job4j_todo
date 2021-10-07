@@ -13,11 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import java.util.List;
 
 public class ItemServlet extends HttpServlet {
-    private final static Gson GSON = new GsonBuilder().create();
+    private final static Gson GSON = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm").create();
     private final HbmStore store = HbmStore.instOf();
 
     @Override
@@ -45,7 +44,7 @@ public class ItemServlet extends HttpServlet {
             String[] cIds = req.getParameterValues("category");
             String description = req.getParameter("Text");
             User user = (User) req.getSession().getAttribute("user");
-            store.add(Item.itemOf(0, description, new Date(), false, user), cIds);
+            store.add(Item.itemOf(0, description, user), cIds);
         }
         resp.sendRedirect(req.getContextPath() + "/index.jsp");
     }

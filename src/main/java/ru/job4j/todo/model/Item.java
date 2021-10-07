@@ -10,6 +10,8 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String description;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date created;
     private boolean done;
 
@@ -24,12 +26,12 @@ public class Item {
         catList.add(category);
     }
 
-    public static Item itemOf(int id, String description, Date created, boolean done, User user) {
+    public static Item itemOf(int id, String description, User user) {
         Item item = new Item();
         item.id = id;
         item.description = description;
-        item.created = created;
-        item.done = done;
+        item.created = new Date(System.currentTimeMillis());
+        item.done = false;
         item.user = user;
         return item;
     }

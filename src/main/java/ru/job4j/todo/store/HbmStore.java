@@ -68,7 +68,9 @@ public class HbmStore {
 
     public List<Item> findAll() {
         return this.tx(session -> session
-                .createQuery("select distinct i from Item i join fetch i.catList").list());
+                .createQuery(
+                        "select distinct i from Item i join fetch i.catList order by i.id asc")
+                .list());
     }
 
     public List<User> findAllUsers() {
