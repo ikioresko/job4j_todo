@@ -17,3 +17,8 @@ create table categories(
 id serial primary key,
 name VARCHAR(15)
 );
+
+create table items_categories(
+item_id INT not null references items(id),
+catlist_id INT not null references categories(id)
+);
